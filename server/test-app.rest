@@ -1,0 +1,11 @@
+### Get metrics
+GET http://localhost:8000/dashboard
+
+### Get products
+GET http://localhost:8000/products
+
+### Get users
+GET http://localhost:8000/users
+
+### Get expenses
+GET http://localhost:8000/expenses
