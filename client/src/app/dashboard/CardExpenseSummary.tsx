@@ -1,25 +1,27 @@
-import { TrendingUp } from "lucide-react";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-
 import {
   ExpenseByCategorySummary,
   useGetDashboardMetricsQuery,
 } from "@/state/api";
-
-const colors = ["#00c49f", "#0088fe", "#ffbb28"];
+import { TrendingUp } from "lucide-react";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 type ExpenseSums = {
   [category: string]: number;
 };
 
-export const CardExpenseSummary = () => {
+const colors = ["#00C49F", "#0088FE", "#FFBB28"];
+
+const CardExpenseSummary = () => {
   const { data: dashboardMetrics, isLoading } = useGetDashboardMetricsQuery();
+
   const expenseSummary = dashboardMetrics?.expenseSummary[0];
+
   const expenseByCategorySummary =
     dashboardMetrics?.expenseByCategorySummary || [];
+
   const expenseSums = expenseByCategorySummary.reduce(
     (acc: ExpenseSums, item: ExpenseByCategorySummary) => {
-      const category = item.category + "Expenses";
+      const category = item.category + " Expenses";
       const amount = parseInt(item.amount, 10);
       if (!acc[category]) acc[category] = 0;
       acc[category] += amount;
@@ -48,13 +50,12 @@ export const CardExpenseSummary = () => {
       ) : (
         <>
           {/* HEADER */}
-          <div className="">
+          <div>
             <h2 className="text-lg font-semibold mb-2 px-7 pt-5">
               Expense Summary
             </h2>
             <hr />
           </div>
-
           {/* BODY */}
           <div className="xl:flex justify-between pr-7">
             {/* CHART */}
@@ -86,7 +87,6 @@ export const CardExpenseSummary = () => {
                 </span>
               </div>
             </div>
-
             {/* LABELS */}
             <ul className="flex flex-col justify-around items-center xl:items-start py-5 gap-3">
               {expenseCategories.map((entry, index) => (
@@ -103,21 +103,19 @@ export const CardExpenseSummary = () => {
               ))}
             </ul>
           </div>
-
           {/* FOOTER */}
-          <div className="">
+          <div>
             <hr />
             {expenseSummary && (
               <div className="mt-3 flex justify-between items-center px-7 mb-4">
                 <div className="pt-2">
                   <p className="text-sm">
-                    Average:{""}
+                    Average:{" "}
                     <span className="font-semibold">
                       ${expenseSummary.totalExpenses.toFixed(2)}
                     </span>
                   </p>
                 </div>
-
                 <span className="flex items-center mt-2">
                   <TrendingUp className="mr-2 text-green-500" />
                   30%
@@ -130,3 +128,5 @@ export const CardExpenseSummary = () => {
     </div>
   );
 };
+
+export default CardExpenseSummary;

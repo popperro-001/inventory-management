@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Header } from "../(components)/Header";
+import Header from "@/app/(components)/Header";
 
-type UserSettings = {
+type UserSetting = {
   label: string;
   value: string | boolean;
   type: "text" | "toggle";
 };
 
-const mockSettings: UserSettings[] = [
+const mockSettings: UserSetting[] = [
   { label: "Username", value: "john_doe", type: "text" },
   { label: "Email", value: "john.doe@example.com", type: "text" },
   { label: "Notification", value: true, type: "toggle" },
@@ -17,9 +17,8 @@ const mockSettings: UserSettings[] = [
   { label: "Language", value: "English", type: "text" },
 ];
 
-const SettingsPage = () => {
-  const [userSettings, setUserSettings] =
-    useState<UserSettings[]>(mockSettings);
+const Settings = () => {
+  const [userSettings, setUserSettings] = useState<UserSetting[]>(mockSettings);
 
   const handleToggleChange = (index: number) => {
     const settingsCopy = [...userSettings];
@@ -30,7 +29,6 @@ const SettingsPage = () => {
   return (
     <div className="w-full">
       <Header name="User Settings" />
-
       <div className="overflow-x-auto mt-5 shadow-md">
         <table className="min-w-full bg-white rounded-lg">
           <thead className="bg-gray-800 text-white">
@@ -43,23 +41,19 @@ const SettingsPage = () => {
               </th>
             </tr>
           </thead>
-
           <tbody>
             {userSettings.map((setting, index) => (
               <tr className="hover:bg-blue-50" key={setting.label}>
                 <td className="py-2 px-4">{setting.label}</td>
                 <td className="py-2 px-4">
                   {setting.type === "toggle" ? (
-                    <label                      
-                      className="inline-flex relative items-center cursor-pointer"
-                    >
+                    <label className="inline-flex relative items-center cursor-pointer">
                       <input
                         type="checkbox"
                         className="sr-only peer"
                         checked={setting.value as boolean}
                         onChange={() => handleToggleChange(index)}
                       />
-
                       <div
                         className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-blue-400 peer-focus:ring-4 
                         transition peer-checked:after:translate-x-full peer-checked:after:border-white 
@@ -90,4 +84,4 @@ const SettingsPage = () => {
   );
 };
 
-export default SettingsPage;
+export default Settings;

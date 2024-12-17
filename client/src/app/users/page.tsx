@@ -1,26 +1,27 @@
 "use client";
 
-import React from "react";
+import { useGetUsersQuery } from "@/state/api";
+import Header from "@/app/(components)/Header";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-import { useGetUsersQuery } from "@/state/api";
-import { Header } from "../(components)/Header";
-
 const columns: GridColDef[] = [
-  { field: "userId", headerName: "ID", minWidth: 90, flex: 1 },
-  { field: "name", headerName: "Name", minWidth: 200, flex: 1 },
-  { field: "email", headerName: "Email", minWidth: 200, flex: 1 },
+  { field: "userId", headerName: "ID", width: 90 },
+  { field: "name", headerName: "Name", width: 200 },
+  { field: "email", headerName: "Email", width: 200 },
 ];
 
-const UsersPage = () => {
+const Users = () => {
   const { data: users, isError, isLoading } = useGetUsersQuery();
 
-  if (isLoading) return <div className="py-4">Loading...</div>;
+  if (isLoading) {
+    return <div className="py-4">Loading...</div>;
+  }
 
-  if (isError || !users)
+  if (isError || !users) {
     return (
-      <div className="text-center text-red-500 py-4">Fialed to fetch users</div>
+      <div className="text-center text-red-500 py-4">Failed to fetch users</div>
     );
+  }
 
   return (
     <div className="flex flex-col">
@@ -36,4 +37,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default Users;

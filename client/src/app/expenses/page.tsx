@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import {
+  ExpenseByCategorySummary,
+  useGetExpensesByCategoryQuery,
+} from "@/state/api";
+import { useMemo, useState } from "react";
+import Header from "@/app/(components)/Header";
 import {
   Cell,
   Legend,
@@ -9,12 +14,6 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-
-import {
-  ExpenseByCategorySummary,
-  useGetExpensesByCategoryQuery,
-} from "@/state/api";
-import { Header } from "../(components)/Header";
 
 type AggregatedDataItem = {
   name: string;
@@ -26,21 +25,21 @@ type AggregatedData = {
   [category: string]: AggregatedDataItem;
 };
 
-const ExpensesPage = () => {
+const Expenses = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
   const {
     data: expensesData,
-    isError,
     isLoading,
+    isError,
   } = useGetExpensesByCategoryQuery();
   const expenses = useMemo(() => expensesData ?? [], [expensesData]);
 
   const parseDate = (dateString: string) => {
     const date = new Date(dateString);
-
     return date.toISOString().split("T")[0];
   };
 
@@ -54,7 +53,6 @@ const ExpensesPage = () => {
           !startDate ||
           !endDate ||
           (dataDate >= startDate && dataDate <= endDate);
-
         return matchesCategory && matchesDate;
       })
       .reduce((acc: AggregatedData, data: ExpenseByCategorySummary) => {
@@ -64,10 +62,8 @@ const ExpensesPage = () => {
           acc[data.category].color = `#${Math.floor(
             Math.random() * 16777215
           ).toString(16)}`;
+          acc[data.category].amount += amount;
         }
-
-        acc[data.category].amount += amount;
-
         return acc;
       }, {});
 
@@ -80,21 +76,25 @@ const ExpensesPage = () => {
       "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md",
   };
 
-  if (isLoading) return <div className="py-4">Loading...</div>;
+  if (isLoading) {
+    return <div className="py-4">Loading...</div>;
+  }
 
-  if (isError || !expensesData)
+  if (isError || !expensesData) {
     return (
       <div className="text-center text-red-500 py-4">
-        Fialed to fetch expenses
+        Failed to fetch expenses
       </div>
     );
+  }
 
   return (
     <div>
+      {/* HEADER */}
       <div className="mb-5">
         <Header name="Expenses" />
         <p className="text-sm text-gray-500">
-          A visual representation of expenses over time
+          A visual representation of expenses over time.
         </p>
       </div>
 
@@ -104,60 +104,53 @@ const ExpensesPage = () => {
           <h3 className="text-lg font-semibold mb-4">
             Filter by Category and Date
           </h3>
-
           <div className="space-y-4">
             {/* CATEGORY */}
             <div>
               <label htmlFor="category" className={classNames.label}>
                 Category
               </label>
-
               <select
-                name="category"
                 id="category"
+                name="category"
                 className={classNames.selectInput}
                 defaultValue="All"
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="All">All</option>
-                <option value="Office">Office</option>
-                <option value="Professional">Professional</option>
-                <option value="Salaries">Salaries</option>
+                <option>All</option>
+                <option>Office</option>
+                <option>Professional</option>
+                <option>Salaries</option>
               </select>
             </div>
-
             {/* START DATE */}
             <div>
               <label htmlFor="start-date" className={classNames.label}>
                 Start Date
               </label>
-
               <input
-                name="start-date"
                 type="date"
                 id="start-date"
+                name="start-date"
                 className={classNames.selectInput}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-
             {/* END DATE */}
             <div>
               <label htmlFor="end-date" className={classNames.label}>
                 End Date
               </label>
-
               <input
-                name="end-date"
                 type="date"
                 id="end-date"
+                name="end-date"
                 className={classNames.selectInput}
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
           </div>
         </div>
-
         {/* PIE CHART */}
         <div className="flex-grow bg-white shadow rounded-lg p-4 md:p-6">
           <ResponsiveContainer width="100%" height={400}>
@@ -177,7 +170,7 @@ const ExpensesPage = () => {
                     <Cell
                       key={`cell-${index}`}
                       fill={
-                        index === activeIndex ? "rgb(29,78,216)" : entry.color
+                        index === activeIndex ? "rgb(29, 78, 216)" : entry.color
                       }
                     />
                   )
@@ -193,4 +186,4 @@ const ExpensesPage = () => {
   );
 };
 
-export default ExpensesPage;
+export default Expenses;

@@ -1,15 +1,11 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Navbar } from "@/app/(components)/Navbar";
-import { Sidebar } from "@/app/(components)/Sidebar";
+import Navbar from "@/app/(components)/Navbar";
+import Sidebar from "@/app/(components)/Sidebar";
 import StoreProvider, { useAppSelector } from "./redux";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-const DashboardLayout = ({ children }: Props) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
@@ -21,7 +17,7 @@ const DashboardLayout = ({ children }: Props) => {
     } else {
       document.documentElement.classList.add("light");
     }
-  }, []);
+  });
 
   return (
     <div
@@ -42,7 +38,7 @@ const DashboardLayout = ({ children }: Props) => {
   );
 };
 
-const DashboardWrapper = ({ children }: Props) => {
+const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
       <DashboardLayout>{children}</DashboardLayout>

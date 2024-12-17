@@ -1,9 +1,6 @@
-"use client";
-
-import { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { v4 } from "uuid";
-
-import { Header } from "../(components)/Header";
+import Header from "@/app/(components)/Header";
 
 type ProductFormData = {
   name: string;
@@ -12,13 +9,17 @@ type ProductFormData = {
   rating: number;
 };
 
-interface Props {
+type CreateProductModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onCreate: (formData: ProductFormData) => void;
-}
+};
 
-export const CreateProductModal = ({ isOpen, onClose, onCreate }: Props) => {
+const CreateProductModal = ({
+  isOpen,
+  onClose,
+  onCreate,
+}: CreateProductModalProps) => {
   const [formData, setFormData] = useState({
     productId: v4(),
     name: "",
@@ -54,7 +55,6 @@ export const CreateProductModal = ({ isOpen, onClose, onCreate }: Props) => {
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <Header name="Create New Product" />
-
         <form onSubmit={handleSubmit} className="mt-5">
           {/* PRODUCT NAME */}
           <label htmlFor="productName" className={labelCssStyles}>
@@ -99,7 +99,7 @@ export const CreateProductModal = ({ isOpen, onClose, onCreate }: Props) => {
           />
 
           {/* RATING */}
-          <label htmlFor="productRating" className={labelCssStyles}>
+          <label htmlFor="rating" className={labelCssStyles}>
             Rating
           </label>
           <input
@@ -112,17 +112,17 @@ export const CreateProductModal = ({ isOpen, onClose, onCreate }: Props) => {
             required
           />
 
+          {/* CREATE ACTIONS */}
           <button
             type="submit"
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           >
             Create
           </button>
-
           <button
+            onClick={onClose}
             type="button"
             className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
-            onClick={onClose}
           >
             Cancel
           </button>
@@ -131,3 +131,5 @@ export const CreateProductModal = ({ isOpen, onClose, onCreate }: Props) => {
     </div>
   );
 };
+
+export default CreateProductModal;

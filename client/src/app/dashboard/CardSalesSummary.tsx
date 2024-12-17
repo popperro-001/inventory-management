@@ -1,33 +1,34 @@
-"use client";
-
+import { useGetDashboardMetricsQuery } from "@/state/api";
 import { TrendingUp } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
-  ResponsiveContainer,
+  Bar,
   BarChart,
   CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Bar,
 } from "recharts";
 
-import { useGetDashboardMetricsQuery } from "@/state/api";
-
-export const CardSalesSummary = () => {
+const CardSalesSummary = () => {
   const { data, isLoading, isError } = useGetDashboardMetricsQuery();
   const salesData = data?.salesSummary || [];
+
   const [timeframe, setTimeframe] = useState("weekly");
 
   const totalValueSum =
     salesData.reduce((acc, curr) => acc + curr.totalValue, 0) || 0;
+
   const averageChangePercentage =
     salesData.reduce((acc, curr, _, array) => {
       return acc + curr.changePercentage! / array.length;
     }, 0) || 0;
+
   const highestValueData = salesData.reduce((acc, curr) => {
     return acc.totalValue > curr.totalValue ? acc : curr;
   }, salesData[0] || {});
+
   const highestValueDate = highestValueData.date
     ? new Date(highestValueData.date).toLocaleDateString("en-US", {
         month: "numeric",
@@ -47,7 +48,7 @@ export const CardSalesSummary = () => {
       ) : (
         <>
           {/* HEADER */}
-          <div className="">
+          <div>
             <h2 className="text-lg font-semibold mb-2 px-7 pt-5">
               Sales Summary
             </h2>
@@ -55,39 +56,36 @@ export const CardSalesSummary = () => {
           </div>
 
           {/* BODY */}
-          <div className="">
+          <div>
             {/* BODY HEADER */}
-            <div className="flex justify-between items-center mb-6 px-7">
+            <div className="flex justify-between items-center mb-6 px-7 mt-5">
               <div className="text-lg font-medium">
                 <p className="text-xs text-gray-400">Value</p>
-
                 <span className="text-2xl font-extrabold">
                   $
-                  {(totalValueSum / 1_000_000).toLocaleString("en", {
+                  {(totalValueSum / 1000000).toLocaleString("en", {
                     maximumFractionDigits: 2,
                   })}
                   m
                 </span>
-
                 <span className="text-green-500 text-sm ml-2">
                   <TrendingUp className="inline w-4 h-4 mr-1" />
                   {averageChangePercentage.toFixed(2)}%
                 </span>
               </div>
-
               <select
-                name=""
-                id=""
                 className="shadow-sm border border-gray-300 bg-white p-2 rounded"
                 value={timeframe}
-                onChange={(e) => setTimeframe(e.target.value)}
+                onChange={(e) => {
+                  setTimeframe(e.target.value);
+                }}
               >
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
             </div>
-
+            {/* CHART */}
             <ResponsiveContainer width="100%" height={350} className="px-7">
               <BarChart
                 data={salesData}
@@ -103,7 +101,7 @@ export const CardSalesSummary = () => {
                 />
                 <YAxis
                   tickFormatter={(value) => {
-                    return `$${(value / 1_000_000).toFixed(0)}m`;
+                    return `$${(value / 1000000).toFixed(0)}m`;
                   }}
                   tick={{ fontSize: 12, dx: -1 }}
                   tickLine={false}
@@ -133,7 +131,7 @@ export const CardSalesSummary = () => {
           </div>
 
           {/* FOOTER */}
-          <div className="">
+          <div>
             <hr />
             <div className="flex justify-between items-center mt-6 text-sm px-7 mb-4">
               <p>{salesData.length || 0} days</p>
@@ -148,3 +146,5 @@ export const CardSalesSummary = () => {
     </div>
   );
 };
+
+export default CardSalesSummary;

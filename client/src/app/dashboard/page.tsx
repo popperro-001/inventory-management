@@ -1,12 +1,17 @@
 "use client";
 
-import { CheckCircle, Package, Tag, TrendingDown, TrendingUp } from "lucide-react";
-
-import { CardExpenseSummary } from "./CardExpenseSummary";
-import { CardPopularProducts } from "./CardPopularProducts";
-import { CardPurchaseSummary } from "./CardPurchaseSummary";
-import { CardSalesSummary } from "./CardSalesSummary";
-import { StatCard } from "./StatCard";
+import {
+  CheckCircle,
+  Package,
+  Tag,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+import CardExpenseSummary from "./CardExpenseSummary";
+import CardPopularProducts from "./CardPopularProducts";
+import CardPurchaseSummary from "./CardPurchaseSummary";
+import CardSalesSummary from "./CardSalesSummary";
+import StatCard from "./StatCard";
 
 const Dashboard = () => {
   return (
@@ -18,7 +23,7 @@ const Dashboard = () => {
       <StatCard
         title="Customer & Expenses"
         primaryIcon={<Package className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2024"
+        dateRange="22 - 29 October 2023"
         details={[
           {
             title: "Customer Growth",
@@ -27,7 +32,7 @@ const Dashboard = () => {
             IconComponent: TrendingUp,
           },
           {
-            title: "Expenses Growth",
+            title: "Expenses",
             amount: "10.00",
             changePercentage: -56,
             IconComponent: TrendingDown,
@@ -37,7 +42,7 @@ const Dashboard = () => {
       <StatCard
         title="Dues & Pending Orders"
         primaryIcon={<CheckCircle className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2024"
+        dateRange="22 - 29 October 2023"
         details={[
           {
             title: "Dues",
@@ -47,7 +52,7 @@ const Dashboard = () => {
           },
           {
             title: "Pending Orders",
-            amount: "147.00",
+            amount: "147",
             changePercentage: -56,
             IconComponent: TrendingDown,
           },
@@ -56,7 +61,7 @@ const Dashboard = () => {
       <StatCard
         title="Sales & Discount"
         primaryIcon={<Tag className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2024"
+        dateRange="22 - 29 October 2023"
         details={[
           {
             title: "Sales",

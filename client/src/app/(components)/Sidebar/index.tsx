@@ -1,22 +1,23 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsSidebarCollapsed } from "@/state";
 import {
   Archive,
   CircleDollarSign,
   Clipboard,
   Layout,
   LucideIcon,
-  MenuIcon,
+  Menu,
   SlidersHorizontal,
   User,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
 
-import { useAppDispatch, useAppSelector } from "@/app/redux";
-import { setIsSidebarCollapsed } from "@/state";
-
-interface SidebarLinkPorps {
+interface SidebarLinkProps {
   href: string;
   icon: LucideIcon;
   label: string;
@@ -28,9 +29,9 @@ const SidebarLink = ({
   icon: Icon,
   label,
   isCollapsed,
-}: SidebarLinkPorps) => {
+}: SidebarLinkProps) => {
   const pathname = usePathname();
-  const isActiove =
+  const isActive =
     pathname === href || (pathname === "/" && href === "/dashboard");
 
   return (
@@ -38,11 +39,14 @@ const SidebarLink = ({
       <div
         className={`cursor-pointer flex items-center ${
           isCollapsed ? "justify-center py-4" : "justify-start px-8 py-4"
-        } hover:text-blue-500 hover:bg-blue-100 gap-3 transition-colors ${
-          isActiove ? "bg-blue-200 text-white" : ""
-        }`}
+        }
+        hover:text-blue-500 hover:bg-blue-100 gap-3 transition-colors ${
+          isActive ? "bg-blue-200 text-white" : ""
+        }
+      }`}
       >
         <Icon className="w-6 h-6 !text-gray-700" />
+
         <span
           className={`${
             isCollapsed ? "hidden" : "block"
@@ -55,7 +59,7 @@ const SidebarLink = ({
   );
 };
 
-export const Sidebar = () => {
+const Sidebar = () => {
   const dispatch = useAppDispatch();
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
@@ -77,21 +81,26 @@ export const Sidebar = () => {
           isSidebarCollapsed ? "px-5" : "px-8"
         }`}
       >
-        <div className="">logo</div>
-
+        <Image
+          src="https://s3-inventorymanagement.s3.us-east-2.amazonaws.com/logo.png"
+          alt="edstock-logo"
+          width={27}
+          height={27}
+          className="rounded w-8"
+        />
         <h1
           className={`${
             isSidebarCollapsed ? "hidden" : "block"
-          } font-extrabold text-2xl uppercase`}
+          } font-extrabold text-2xl`}
         >
-          Pastock
+          EDSTOCK
         </h1>
 
         <button
           className="md:hidden px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
           onClick={toggleSidebar}
         >
-          <MenuIcon className="w-4 h-4" />
+          <Menu className="w-4 h-4" />
         </button>
       </div>
 
@@ -103,35 +112,30 @@ export const Sidebar = () => {
           label="Dashboard"
           isCollapsed={isSidebarCollapsed}
         />
-
         <SidebarLink
           href="/inventory"
           icon={Archive}
           label="Inventory"
           isCollapsed={isSidebarCollapsed}
         />
-
         <SidebarLink
           href="/products"
           icon={Clipboard}
           label="Products"
           isCollapsed={isSidebarCollapsed}
         />
-
         <SidebarLink
           href="/users"
           icon={User}
           label="Users"
           isCollapsed={isSidebarCollapsed}
         />
-
         <SidebarLink
           href="/settings"
           icon={SlidersHorizontal}
           label="Settings"
           isCollapsed={isSidebarCollapsed}
         />
-
         <SidebarLink
           href="/expenses"
           icon={CircleDollarSign}
@@ -141,9 +145,11 @@ export const Sidebar = () => {
       </div>
 
       {/* FOOTER */}
-      <div className={`${isSidebarCollapsed ? 'hidden' : 'block'} mb-10`}>
-        <p className="text-center text-xs text-gray-500">&copy; 2024 Pastock</p>
+      <div className={`${isSidebarCollapsed ? "hidden" : "block"} mb-10`}>
+        <p className="text-center text-xs text-gray-500">&copy; 2024 Edstock</p>
       </div>
     </div>
   );
 };
+
+export default Sidebar;
